@@ -1,0 +1,87 @@
+{
+  "rules": "",
+
+    "billings": {
+      ".read": "",
+      ".write": "",
+      ".validate": "",
+      ".indexOn": [],
+
+      "$billing_id": {
+        ".read": "",
+        ".write": "",
+        ".validate": "",
+        ".indexOn": []
+      }
+    },
+
+    "plans": {
+      ".read": true,
+      ".write": false,
+      ".validate": "",
+      ".indexOn": [],
+
+      "$plan_id": {
+        ".read": "",
+        ".write": "",
+        ".validate": "",
+        ".indexOn": []
+      }
+    },
+
+    "team_members": {
+      ".read": "",
+      ".write": "",
+      ".validate": "",
+      ".indexOn": [],
+
+      "$team_member_id": {
+        ".read": "",
+        ".write": "",
+        ".validate": "",
+        ".indexOn": []
+      }
+    },
+
+    "teams": {
+      ".read": "",
+      ".write": "",
+      ".validate": "",
+      ".indexOn": [],
+
+      "$team_id": {
+        ".read": "",
+        ".write": "",
+        ".validate": "",
+        ".indexOn": []
+      }
+    },
+
+    "users": {
+      ".read": true,
+      ".write": "!data.exists() || !newData.exists()",
+      ".validate": "auth !== null && newData.val() === auth.uid",
+      ".indexOn": [],
+
+      "$user_id": {
+        ".read": "",
+        ".write": "$user_id === auth.uid",
+        ".validate": "newData.isString()",
+        ".indexOn": [],
+
+        "provider": {
+          ".validate": "newData.isString()"
+        },
+        "email": {
+          ".validate": "newData.isString()"
+        },
+        "name": {
+          ".validate": "newData.isString()"
+        },
+
+        "$other": { ".validate": false }
+      }
+    }
+
+  }
+}

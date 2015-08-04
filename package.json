@@ -1,0 +1,19 @@
+{
+  "name": "doorbell-firebase",
+  "version": "0.0.1",
+  "description": "Doorbell Firebase",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doorbellapp/doorbell-firebase.git"
+  },
+  "author": "Angelo Ashmore",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/doorbellapp/doorbell-firebase/issues"
+  },
+  "homepage": "https://github.com/doorbellapp/doorbell-firebase#readme"
+}
