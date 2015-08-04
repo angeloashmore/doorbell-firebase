@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/doorbellapp/doorbell-firebase/issues"
   },
-  "homepage": "https://github.com/doorbellapp/doorbell-firebase#readme"
+  "homepage": "https://github.com/doorbellapp/doorbell-firebase#readme",
+  "devDependencies": {
+    "babel": "^5.8.20",
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5",
+    "targaryen": "^1.1.4"
+  }
 }

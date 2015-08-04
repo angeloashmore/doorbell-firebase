@@ -1,0 +1,14 @@
+{
+  "users": {
+    "simplelogin:1": {
+      "provider": "password",
+      "name": "Angelo Ashmore",
+      "email": "angelo@doorbell.im"
+    },
+    "simplelogin:2": {
+      "provider": "password",
+      "name": "Tushar Dubey",
+      "email": "tushar@doorbell.im"
+    }
+  }
+}
