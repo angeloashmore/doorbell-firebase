@@ -7,6 +7,17 @@ import authServer from '../helpers/authServer';
 chai.use(targaryen.chai);
 
 const path = 'billings';
+const sampleData = {
+  planId: 'USER__DEFAULT',
+  stripeCustomerId: 'cus_12345',
+  email: 'name@example.com',
+  card: {
+    brand: 'Visa',
+    last4: '1234',
+    expMonth: '01',
+    expYear: '16',
+  },
+};
 
 describe(`/${path}`, function() {
   before(function() {
@@ -22,9 +33,9 @@ describe(`/${path}`, function() {
       .cannot.read.path(path);
   });
 
-  it('should be writable only by doorbell-firebase-server', function() {
+  it('should not be writable by anyone', function() {
     expect(authServer)
-      .can.write()
+      .cannot.write()
       .to.path(path);
 
     expect(users.simplelogin)
@@ -57,7 +68,7 @@ describe(`/${path}`, function() {
 
       it('should be writable only by doorbell-firebase-server', function() {
         expect(authServer)
-          .can.write()
+          .can.write(sampleData)
           .to.path(`${path}/teams/0`);
 
         expect(users.simplelogin)
@@ -90,7 +101,7 @@ describe(`/${path}`, function() {
 
       it('should be writable only by doorbell-firebase-server', function() {
         expect(authServer)
-          .can.write()
+          .can.write(sampleData)
           .to.path(`${path}/users/${users.simplelogin.uid}`);
 
         expect(users.simplelogin)

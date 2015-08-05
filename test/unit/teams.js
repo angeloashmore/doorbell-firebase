@@ -7,6 +7,10 @@ import authServer from '../helpers/authServer';
 chai.use(targaryen.chai);
 
 const path = 'teams';
+const sampleData = {
+  name: 'Coldwell Banker Pacific Properties',
+  email: 'name@example.com',
+};
 
 describe(`/${path}`, function() {
   before(function() {
@@ -56,15 +60,15 @@ describe(`/${path}`, function() {
 
     it('should be writable only by doorbell-firebase-server', function() {
       expect(authServer)
-        .can.write()
+        .can.write(sampleData)
         .to.path(`${path}/0`);
 
       expect(users.simplelogin)
-        .cannot.write()
+        .cannot.write(sampleData)
         .to.path(`${path}/0`);
 
       expect(users.unauthenticated)
-        .cannot.write()
+        .cannot.write(sampleData)
         .to.path(`${path}/0`);
     });
   });

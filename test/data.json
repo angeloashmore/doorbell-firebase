@@ -2,38 +2,38 @@
   "billings": {
     "users": {
       "simplelogin:1": {
-        "plan_id": "USER__DEFAULT",
-        "stripe_customer_id": "cus_12345",
+        "planId": "USER__DEFAULT",
+        "stripeCustomerId": "cus_12345",
         "email": "name@example.com",
         "card": {
           "brand": "Visa",
           "last4": "1234",
-          "exp_month": "01",
-          "exp_year": "16"
+          "expMonth": "01",
+          "expYear": "16"
         }
       },
       "simplelogin:2": {
-        "plan_id": "USER__DEFAULT",
-        "stripe_customer_id": "cus_28189",
+        "planId": "USER__DEFAULT",
+        "stripeCustomerId": "cus_28189",
         "email": "name@example.com",
         "card": {
           "brand": "Visa",
           "last4": "1234",
-          "exp_month": "01",
-          "exp_year": "16"
+          "expMonth": "01",
+          "expYear": "16"
         }
       }
     },
     "teams": {
       "0": {
-        "plan_id": "TEAM__DEFAULT",
-        "stripe_customer_id": "cus_67890",
+        "planId": "TEAM__DEFAULT",
+        "stripeCustomerId": "cus_67890",
         "email": "name@example.com",
         "card": {
           "brand": "Visa",
           "last4": "1234",
-          "exp_month": "01",
-          "exp_year": "16"
+          "expMonth": "01",
+          "expYear": "16"
         }
       }
     }

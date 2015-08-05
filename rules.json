@@ -1,22 +1,26 @@
 {
   "rules": {
+    ".read": "false",
+    ".write": false,
 
     "billings": {
       ".read": "auth.uid === 'doorbell-firebase-server'",
-      ".write": "auth.uid === 'doorbell-firebase-server'",
 
       "users": {
+        ".write": "auth.uid === 'doorbell-firebase-server'",
+
         "$user_id": {
           ".read": "auth.uid === $user_id",
+          ".validate": "newData.hasChildren(['planId', 'stripeCustomerId', 'email', 'card'])",
 
-          "plan_id": { ".validate": "newData.isString() && root.child('plans').hasChild(newData.val())" },
-          "stripe_customer_id": { ".validate": "newData.isString() && newData.val().matches(/^cus_/)" },
+          "planId": { ".validate": "newData.isString() && root.child('plans').hasChild(newData.val())" },
+          "stripeCustomerId": { ".validate": "newData.isString() && newData.val().matches(/^cus_/)" },
           "email": { ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)" },
           "card": {
             "brand": { ".validate": "newData.isString() && newData.val().length > 0" },
             "last4": { ".validate": "newData.isString() && newData.val().length > 0" },
-            "exp_month": { ".validate": "newData.isString() && newData.val().length > 0" },
-            "exp_year": { ".validate": "newData.isString() && newData.val().length > 0" },
+            "expMonth": { ".validate": "newData.isString() && newData.val().length > 0" },
+            "expYear": { ".validate": "newData.isString() && newData.val().length > 0" },
 
             "$other": { ".validate": false }
           },
@@ -25,17 +29,20 @@
         }
       },
       "teams": {
+        ".write": "auth.uid === 'doorbell-firebase-server'",
+
         "$team_id": {
           ".read": "auth !== null && root.child('team_users').child($team_id).hasChild(auth.uid)",
+          ".validate": "newData.hasChildren(['planId', 'stripeCustomerId', 'email', 'card'])",
 
-          "plan_id": { ".validate": "newData.isString() && root.child('plans').hasChild(newData.val())" },
-          "stripe_customer_id": { ".validate": "newData.isString() && newData.val().matches(/^cus_/)" },
+          "planId": { ".validate": "newData.isString() && root.child('plans').hasChild(newData.val())" },
+          "stripeCustomerId": { ".validate": "newData.isString() && newData.val().matches(/^cus_/)" },
           "email": { ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)" },
           "card": {
             "brand": { ".validate": "newData.isString() && newData.val().length > 0" },
             "last4": { ".validate": "newData.isString() && newData.val().length > 0" },
-            "exp_month": { ".validate": "newData.isString() && newData.val().length > 0" },
-            "exp_year": { ".validate": "newData.isString() && newData.val().length > 0" },
+            "expMonth": { ".validate": "newData.isString() && newData.val().length > 0" },
+            "expYear": { ".validate": "newData.isString() && newData.val().length > 0" },
 
             "$other": { ".validate": false }
           },
@@ -58,9 +65,25 @@
 
       "$team_id": {
         ".read": "auth !== null && data.hasChild(auth.uid)",
+        ".validate": "root.child('teams').hasChild($team_id)",
 
         "$user_id": {
-          ".validate": "newData.hasChildren(['title', 'email', 'private', 'roles'])"
+          ".validate": "root.child('users').hasChild($user_id) && newData.hasChildren(['email', 'private', 'roles'])",
+
+          "title": { ".validate": "newData.isString()" },
+          "email": { ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)" },
+          "private": { ".validate": "newData.isBoolean()" },
+          "roles": {
+            ".validate": "newData.hasChildren(['owner', 'admin', 'billing'])",
+
+            "owner": { ".validate": "newData.isBoolean()" },
+            "admin": { ".validate": "newData.isBoolean()" },
+            "billing": { ".validate": "newData.isBoolean()" },
+
+            "$other": { ".validate": false }
+          },
+
+          "$other": { ".validate": false }
         }
       }
     },
@@ -70,7 +93,13 @@
       ".write": "auth.uid === 'doorbell-firebase-server'",
 
       "$team_id": {
-        ".read": "auth !== null && root.child('team_users').child($team_id).hasChild(auth.uid)"
+        ".read": "auth !== null && root.child('team_users').child($team_id).hasChild(auth.uid)",
+        ".validate": "newData.hasChildren(['name', 'email'])",
+
+        "name": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "email": { ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)" },
+
+        "$other": { ".validate": false }
       }
     },
 
@@ -79,7 +108,14 @@
       ".write": "auth.uid === 'doorbell-firebase-server'",
 
       "$user_id": {
-        ".read": "auth.uid === $user_id"
+        ".read": "auth.uid === $user_id",
+        ".validate": "newData.hasChildren(['provider', 'name', 'email'])",
+
+        "provider": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "name": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "email": { ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)" },
+
+        "$other": { ".validate": false }
       }
     }
 
