@@ -117,6 +117,31 @@
 
         "$other": { ".validate": false }
       }
+    },
+
+    "_queue": {
+      ".read": "auth.uid === 'doorbell-firebase-server'",
+      ".write": "auth !== null",
+
+      "$task_id": {
+        ".write": "auth.uid === 'doorbell-firebase-server'",
+        ".validate": "newData.hasChildren(['_action', '_state', '_state_changed', '_owner', '_progress', '_error_details'])",
+
+        "_action": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "_state": { ".validate": "newData.isString()" },
+        "_stateChanged": { ".validate": "newData.isNumber() && (newData.val() === now || data.val() === newData.val())" },
+        "_owner": { ".validate": "newData.isString()" },
+        "_progress": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100" },
+        "_error": {
+          "message": { ".validate": "newData.isString()" },
+          "stack": { ".validate": "newData.isString()" },
+          "previousState": { ".validate": "newData.isString()" },
+          "originalTask": {},
+          "attempts": { ".validate": "newData.isNumber() && newData.val() > 0" },
+
+          "$other": { ".validate": false }
+        }
+      }
     }
 
   }
