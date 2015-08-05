@@ -1,6 +1,15 @@
 {
   "rules": {
 
+    "plans": {
+      ".read": true,
+      ".write": false,
+
+      "$plan_id": {
+        ".validate": "newData.hasChildren(['name', 'type', 'stripe_plan_id'])"
+      }
+    },
+
     "users": {
       ".read": true,
       ".validate": "auth !== null && newData.exists()",
