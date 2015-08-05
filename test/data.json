@@ -1,4 +1,98 @@
 {
+  "billings": {
+    "users": {
+      "simplelogin:1": {
+        "plan_id": "USER__DEFAULT",
+        "stripe_customer_id": "cus_12345",
+        "email": "name@example.com",
+        "card": {
+          "brand": "Visa",
+          "last4": "1234",
+          "exp_month": "01",
+          "exp_year": "16"
+        }
+      },
+      "simplelogin:2": {
+        "plan_id": "USER__DEFAULT",
+        "stripe_customer_id": "cus_28189",
+        "email": "name@example.com",
+        "card": {
+          "brand": "Visa",
+          "last4": "1234",
+          "exp_month": "01",
+          "exp_year": "16"
+        }
+      }
+    },
+    "teams": {
+      "0": {
+        "plan_id": "TEAM__DEFAULT",
+        "stripe_customer_id": "cus_67890",
+        "email": "name@example.com",
+        "card": {
+          "brand": "Visa",
+          "last4": "1234",
+          "exp_month": "01",
+          "exp_year": "16"
+        }
+      }
+    }
+  },
+
+  "plans": {
+    "USER__DEFAULT": {
+      "type": "user",
+      "name": "Default"
+    },
+    "TEAM__DEFAULT": {
+      "type": "team",
+      "name": "Default"
+    }
+  },
+
+  "team_users": {
+    "0": {
+      "simplelogin:1": {
+        "title": "Co-Founder, Software Developer",
+        "email": "angelo@doorbell.im",
+        "private": false,
+        "roles": {
+          "owner": true
+        }
+      },
+      "simplelogin:2": {
+        "title": "Co-Founder",
+        "email": "tushar@doorbell.im",
+        "private": false,
+        "roles": {
+          "admin": true,
+          "billing": true
+        }
+      }
+    },
+    "1": {
+      "simplelogin:2": {
+        "title": "Co-Founder",
+        "email": "tushar@doorbell.im",
+        "private": false,
+        "roles": {
+          "owner": true
+        }
+      }
+    }
+  },
+
+  "teams": {
+    "0": {
+      "name": "Coldwell Banker Pacific Properties",
+      "email": "name@example.com"
+    },
+    "1": {
+      "name": "Hawaii Real Estate Online LLC",
+      "email": "name@example.com"
+    }
+  },
+
   "users": {
     "simplelogin:1": {
       "provider": "password",

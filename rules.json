@@ -1,83 +1,49 @@
 {
   "rules": {
 
-    "plans": {
-      ".read": "auth !== null",
+    "billings": {
       ".write": false,
 
-      "$plan_id": {
-        ".validate": "newData.hasChildren(['name', 'type', 'stripe_plan_id'])"
+      "users": {
+        "$user_id": {
+          ".read": "$user_id === auth.uid"
+        }
+      },
+      "teams": {
+        "$team_id": {
+          ".read": "auth !== null && root.child('team_users').child($team_id).hasChild(auth.uid)"
+        }
       }
     },
 
-    "team_members": {
+    "plans": {
       ".read": "auth !== null",
+      ".write": false
+    },
+
+    "team_users": {
       ".write": false,
 
-      "$team_member_id": {
-        ".validate": "newData.hasChildren(['team_id', 'user_id', 'title', 'email', 'private', 'roles_mask'])",
+      "$team_id": {
+        ".read": "auth !== null && data.hasChild(auth.uid)",
 
-        "team_id": {
-          ".validate": "newData.isNumber()"
-        },
-        "user_id": {
-          ".validate": "newData.isNumber()"
-        },
-        "title": {
-          ".validate": "newData.isString() && newData.val().length > 0"
-        },
-        "email": {
-          ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)"
-        },
-        "private": {
-          ".validate": "newData.isBoolean()"
-        },
-        "roles_mask": {
-          ".validate": "newData.isNumber()"
-        },
-
-        "$other": { ".validate": false }
+        "$user_id": {
+          ".validate": "newData.hasChildren(['title', 'email', 'private', 'roles'])"
+        }
       }
     },
 
     "teams": {
-      ".read": "auth !== null",
       ".write": false,
-
       "$team_id": {
-        ".validate": "newData.hasChildren(['name', 'email'])",
-
-        "name": {
-          ".validate": "newData.isString() && newData.val().length > 0"
-        },
-        "email": {
-          ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)"
-        },
-
-        "$other": { ".validate": false }
+        ".read": "auth !== null && root.child('team_users').child($team_id).hasChild(auth.uid)"
       }
     },
 
     "users": {
-      ".read": "auth !== null",
       ".write": false,
-      ".validate": "auth !== null && newData.exists()",
-      ".indexOn": [],
-
       "$user_id": {
-        ".validate": "newData.exists() && newData.hasChildren(['provider', 'email', 'name'])",
-
-        "provider": {
-          ".validate": "newData.isString() && newData.val().length > 0"
-        },
-        "email": {
-          ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)"
-        },
-        "name": {
-          ".validate": "newData.isString() && newData.val().length > 0"
-        },
-
-        "$other": { ".validate": false }
+        ".read": "$user_id === auth.uid"
       }
     }
 

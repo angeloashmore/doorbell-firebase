@@ -13,9 +13,9 @@ describe(`/${path}`, function() {
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should be readable by any authenticated user', function() {
+  it('should not be readable by anyone', function() {
     expect(users.simplelogin)
-      .can.read.path(path);
+      .cannot.read.path(path);
 
     expect(users.unauthenticated)
       .cannot.read.path(path);
@@ -35,6 +35,9 @@ describe(`/${path}`, function() {
     it('should be readable only by team members', function() {
       expect(users.simplelogin)
         .can.read.path(`${path}/0`);
+
+      expect(users.simplelogin)
+        .cannot.read.path(`${path}/1`);
 
       expect(users.unauthenticated)
         .cannot.read.path(`${path}/0`);

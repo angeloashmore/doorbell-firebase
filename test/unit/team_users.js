@@ -5,7 +5,7 @@ import data from '../data';
 
 chai.use(targaryen.chai);
 
-const path = 'team_members';
+const path = 'team_users';
 
 describe(`/${path}`, function() {
   before(function() {
@@ -13,9 +13,9 @@ describe(`/${path}`, function() {
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should be readable only by an authenticated user', function() {
+  it('should not be readable by anyone', function() {
     expect(users.simplelogin)
-      .can.read.path(path);
+      .cannot.read.path(path);
 
     expect(users.unauthenticated)
       .cannot.read.path(path);
@@ -31,10 +31,13 @@ describe(`/${path}`, function() {
       .to.path(path);
   });
 
-  describe(`/$team_member_id`, function() {
-    it('should be readable only by team members', function() {
+  describe(`/$team_id`, function() {
+    it('should be readable only by team users', function() {
       expect(users.simplelogin)
         .can.read.path(`${path}/0`);
+
+      expect(users.simplelogin)
+        .cannot.read.path(`${path}/1`);
 
       expect(users.unauthenticated)
         .cannot.read.path(`${path}/0`);
