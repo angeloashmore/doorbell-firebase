@@ -5,7 +5,7 @@ import data from '../data';
 
 chai.use(targaryen.chai);
 
-const path = 'users';
+const path = 'team_members';
 
 describe(`/${path}`, function() {
   before(function() {
@@ -13,7 +13,7 @@ describe(`/${path}`, function() {
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should be readable by any authenticated user', function() {
+  it('should be readable only by an authenticated user', function() {
     expect(users.simplelogin)
       .can.read.path(path);
 
@@ -31,23 +31,23 @@ describe(`/${path}`, function() {
       .to.path(path);
   });
 
-  describe('/$user_id', function() {
-    it('should be readable by any authenticated user', function() {
+  describe(`/$team_member_id`, function() {
+    it('should be readable only by team members', function() {
       expect(users.simplelogin)
-        .can.read.path(`${path}/${users.simplelogin.uid}`);
+        .can.read.path(`${path}/0`);
 
       expect(users.unauthenticated)
-        .cannot.read.path(`${path}/${users.simplelogin.uid}`);
+        .cannot.read.path(`${path}/0`);
     });
 
     it('should not be writable by anyone', function() {
       expect(users.simplelogin)
         .cannot.write()
-        .to.path(`${path}/${users.simplelogin.uid}`);
+        .to.path(`${path}/0`);
 
       expect(users.unauthenticated)
         .cannot.write()
-        .to.path(`${path}/${users.simplelogin.uid}`);
+        .to.path(`${path}/0`);
     });
   });
 });
