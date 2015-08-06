@@ -12,13 +12,13 @@ const sampleData = {
   email: 'name@example.com',
 };
 
-describe(`/${path}`, function() {
-  before(function() {
+describe(`/${path}`, () => {
+  before(() => {
     targaryen.setFirebaseData(data);
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should not be readable by anyone', function() {
+  it('should not be readable by anyone', () => {
     expect(authServer)
       .cannot.read.path(path);
 
@@ -29,7 +29,7 @@ describe(`/${path}`, function() {
       .cannot.read.path(path);
   });
 
-  it('should not be writable anyone', function() {
+  it('should not be writable anyone', () => {
     expect(authServer)
       .cannot.write()
       .to.path(path);
@@ -43,8 +43,8 @@ describe(`/${path}`, function() {
       .to.path(path);
   });
 
-  describe(`/$team_id`, function() {
-    it('should be readable only by team members and doorbell-firebase-server', function() {
+  describe(`/$team_id`, () => {
+    it('should be readable only by team members and doorbell-firebase-server', () => {
       expect(users.simplelogin)
         .can.read.path(`${path}/0`);
 
@@ -61,7 +61,7 @@ describe(`/${path}`, function() {
         .can.read.path(`${path}/1`);
     });
 
-    it('should be writable only by doorbell-firebase-server', function() {
+    it('should be writable only by doorbell-firebase-server', () => {
       expect(authServer)
         .can.write(sampleData)
         .to.path(`${path}/0`);

@@ -25,13 +25,13 @@ const invalidSampleData = {
   card: 'invalid_card',
 };
 
-describe(`/${path}`, function() {
-  before(function() {
+describe(`/${path}`, () => {
+  before(() => {
     targaryen.setFirebaseData(data);
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should not be readable by anyone', function() {
+  it('should not be readable by anyone', () => {
     expect(authServer)
       .cannot.read.path(path);
 
@@ -42,7 +42,7 @@ describe(`/${path}`, function() {
       .cannot.read.path(path);
   });
 
-  it('should not be writable by anyone', function() {
+  it('should not be writable by anyone', () => {
     expect(authServer)
       .cannot.write()
       .to.path(path);
@@ -56,9 +56,9 @@ describe(`/${path}`, function() {
       .to.path(path);
   });
 
-  describe(`/teams`, function() {
-    describe('/$teamId', function() {
-      it('should be readable only by team users and doorbell-firebase-server', function() {
+  describe(`/teams`, () => {
+    describe('/$teamId', () => {
+      it('should be readable only by team users and doorbell-firebase-server', () => {
         expect(users.simplelogin)
           .can.read.path(`${path}/teams/0`);
 
@@ -75,7 +75,7 @@ describe(`/${path}`, function() {
           .can.read.path(`${path}/teams/1`);
       });
 
-      it('should be writable only by doorbell-firebase-server', function() {
+      it('should be writable only by doorbell-firebase-server', () => {
         expect(authServer)
           .can.write(sampleData)
           .to.path(`${path}/teams/0`);
@@ -89,7 +89,7 @@ describe(`/${path}`, function() {
           .to.path(`${path}/teams/0`);
       });
 
-      it('should fail when writing invalid data', function() {
+      it('should fail when writing invalid data', () => {
         expect(authServer)
           .cannot.write(invalidSampleData)
           .to.path(`${path}/teams/0`);
@@ -97,9 +97,9 @@ describe(`/${path}`, function() {
     });
   });
 
-  describe('/users', function() {
-    describe('/$userId', function() {
-      it('should be readable only by its user and doorbell-firebase-server', function() {
+  describe('/users', () => {
+    describe('/$userId', () => {
+      it('should be readable only by its user and doorbell-firebase-server', () => {
         expect(users.simplelogin)
           .can.read.path(`${path}/users/${users.simplelogin.uid}`);
 
@@ -116,7 +116,7 @@ describe(`/${path}`, function() {
           .can.read.path(`${path}/users/simplelogin:2`);
       });
 
-      it('should be writable only by doorbell-firebase-server', function() {
+      it('should be writable only by doorbell-firebase-server', () => {
         expect(authServer)
           .can.write(sampleData)
           .to.path(`${path}/users/${users.simplelogin.uid}`);
@@ -130,7 +130,7 @@ describe(`/${path}`, function() {
           .to.path(`${path}/users/${users.simplelogin.uid}`);
       });
 
-      it('should fail when writing invalid data', function() {
+      it('should fail when writing invalid data', () => {
         expect(authServer)
           .cannot.write(invalidSampleData)
           .to.path(`${path}/teams/0`);

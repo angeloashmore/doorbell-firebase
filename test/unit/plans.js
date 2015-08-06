@@ -8,13 +8,13 @@ chai.use(targaryen.chai);
 
 const path = 'plans';
 
-describe(`/${path}`, function() {
-  before(function() {
+describe(`/${path}`, () => {
+  before(() => {
     targaryen.setFirebaseData(data);
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should be readble by all authenticated users and doorbell-firebase-server', function() {
+  it('should be readble by all authenticated users and doorbell-firebase-server', () => {
     expect(authServer)
       .can.read.path(path);
 
@@ -25,7 +25,7 @@ describe(`/${path}`, function() {
       .cannot.read.path(path);
   });
 
-  it('should not be writable by anyone', function() {
+  it('should not be writable by anyone', () => {
     expect(authServer)
       .cannot.write()
       .to.path(path);
@@ -39,8 +39,8 @@ describe(`/${path}`, function() {
       .to.path(path);
   });
 
-  describe('/$planId', function() {
-    it('should be readable by all authenticated users and doorbell-firebase-server', function() {
+  describe('/$planId', () => {
+    it('should be readable by all authenticated users and doorbell-firebase-server', () => {
       expect(authServer)
         .can.read.path(`${path}/USER__DEFAULT`);
 
@@ -51,7 +51,7 @@ describe(`/${path}`, function() {
         .cannot.read.path(`${path}/USER__DEFAULT`);
     });
 
-    it('should not be wriable by anyone', function() {
+    it('should not be wriable by anyone', () => {
       expect(authServer)
         .cannot.write()
         .to.path(`${path}/USER__DEFAULT`);

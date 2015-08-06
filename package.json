@@ -4,6 +4,7 @@
   "description": "Doorbell Firebase",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint test",
     "test": "mocha",
     "build": "blaze rules.yaml"
   },
@@ -19,8 +20,12 @@
   "homepage": "https://github.com/doorbellapp/doorbell-firebase#readme",
   "devDependencies": {
     "babel": "^5.8.20",
+    "babel-eslint": "^4.0.5",
     "blaze_compiler": "0.0.30",
     "chai": "^3.2.0",
+    "eslint": "^1.0.0",
+    "eslint-config-airbnb": "0.0.7",
+    "eslint-plugin-react": "^3.2.0",
     "mocha": "^2.2.5",
     "targaryen": "^1.1.4"
   },

@@ -18,13 +18,13 @@ const sampleData = {
   },
 };
 
-describe(`/${path}`, function() {
-  before(function() {
+describe(`/${path}`, () => {
+  before(() => {
     targaryen.setFirebaseData(data);
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should not be readable by anyone', function() {
+  it('should not be readable by anyone', () => {
     expect(authServer)
       .cannot.read.path(path);
 
@@ -35,7 +35,7 @@ describe(`/${path}`, function() {
       .cannot.read.path(path);
   });
 
-  it('should not be writable by anyone', function() {
+  it('should not be writable by anyone', () => {
     expect(authServer)
       .cannot.write()
       .to.path(path);
@@ -49,8 +49,8 @@ describe(`/${path}`, function() {
       .to.path(path);
   });
 
-  describe(`/$teamId`, function() {
-    it('should be readable only by team users and doorbel-firebase-server', function() {
+  describe(`/$teamId`, () => {
+    it('should be readable only by team users and doorbel-firebase-server', () => {
       expect(users.simplelogin)
         .can.read.path(`${path}/0`);
 
@@ -67,7 +67,7 @@ describe(`/${path}`, function() {
         .can.read.path(`${path}/1`);
     });
 
-    it('should not be writable by anyone', function() {
+    it('should not be writable by anyone', () => {
       expect(authServer)
         .cannot.write()
         .to.path(`${path}/0`);
@@ -81,8 +81,8 @@ describe(`/${path}`, function() {
         .to.path(`${path}/0`);
     });
 
-    describe('/$userId', function() {
-      it('should be readable only by team users and doorbell-firebase-server', function() {
+    describe('/$userId', () => {
+      it('should be readable only by team users and doorbell-firebase-server', () => {
         expect(users.simplelogin)
           .can.read.path(`${path}/0/${users.simplelogin.uid}`);
 
@@ -99,7 +99,7 @@ describe(`/${path}`, function() {
           .can.read.path(`${path}/1/simplelogin:2`);
       });
 
-      it('should be writable only by doorbell-firebase-server', function() {
+      it('should be writable only by doorbell-firebase-server', () => {
         expect(authServer)
           .can.write(sampleData)
           .to.path(`${path}/0/${users.simplelogin.uid}`);
