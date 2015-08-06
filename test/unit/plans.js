@@ -2,6 +2,7 @@ import chai, { expect } from 'chai';
 import targaryen, { users } from 'targaryen';
 import rules from '../../rules';
 import data from '../data';
+import authServer from '../helpers/authServer';
 
 chai.use(targaryen.chai);
 
@@ -13,7 +14,10 @@ describe(`/${path}`, function() {
     targaryen.setFirebaseRules(rules);
   });
 
-  it('is readable by all authenticated users', function() {
+  it('should be readble by all authenticated users and doorbell-firebase-server', function() {
+    expect(authServer)
+      .can.read.path(path);
+
     expect(users.simplelogin)
       .can.read.path(path);
 
@@ -21,7 +25,11 @@ describe(`/${path}`, function() {
       .cannot.read.path(path);
   });
 
-  it('is not writable by all users', function() {
+  it('should not be writable by anyone', function() {
+    expect(authServer)
+      .cannot.write()
+      .to.path(path);
+
     expect(users.simplelogin)
       .cannot.write()
       .to.path(path);

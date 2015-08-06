@@ -7,6 +7,11 @@ import authServer from '../helpers/authServer';
 chai.use(targaryen.chai);
 
 const path = 'users';
+const sampleData = {
+  provider: 'password',
+  email: 'name@example.com',
+  name: 'First Last',
+};
 
 describe(`/${path}`, function() {
   before(function() {
@@ -14,9 +19,9 @@ describe(`/${path}`, function() {
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should be readable only by doorbell-firebase-server', function() {
+  it('should not be readable by anyone', function() {
     expect(authServer)
-      .can.read.path(path);
+      .cannot.read.path(path);
 
     expect(users.simplelogin)
       .cannot.read.path(path);
@@ -25,9 +30,9 @@ describe(`/${path}`, function() {
       .cannot.read.path(path);
   });
 
-  it('should be writable only by doorbell-firebase-server', function() {
+  it('should not be writable anyone', function() {
     expect(authServer)
-      .can.write()
+      .cannot.write()
       .to.path(path);
 
     expect(users.simplelogin)
@@ -59,15 +64,15 @@ describe(`/${path}`, function() {
 
     it('should be writable only by doorbell-firebase-server', function() {
       expect(authServer)
-        .can.write()
-        .to.path(path);
+        .can.write(sampleData)
+        .to.path(`${path}/${users.simplelogin.uid}`);
 
       expect(users.simplelogin)
-        .cannot.write()
+        .cannot.write(sampleData)
         .to.path(`${path}/${users.simplelogin.uid}`);
 
       expect(users.unauthenticated)
-        .cannot.write()
+        .cannot.write(sampleData)
         .to.path(`${path}/${users.simplelogin.uid}`);
     });
   });

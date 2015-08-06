@@ -18,9 +18,9 @@ describe(`/${path}`, function() {
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should be readable only by doorbell-firebase-server', function() {
+  it('should not be readable by anyone', function() {
     expect(authServer)
-      .can.read.path(path);
+      .cannot.read.path(path);
 
     expect(users.simplelogin)
       .cannot.read.path(path);
@@ -29,9 +29,9 @@ describe(`/${path}`, function() {
       .cannot.read.path(path);
   });
 
-  it('should be writable only by doorbell-firebase-server', function() {
+  it('should not be writable anyone', function() {
     expect(authServer)
-      .can.write()
+      .cannot.write()
       .to.path(path);
 
     expect(users.simplelogin)

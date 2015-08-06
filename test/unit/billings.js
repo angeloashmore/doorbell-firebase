@@ -25,9 +25,9 @@ describe(`/${path}`, function() {
     targaryen.setFirebaseRules(rules);
   });
 
-  it('should be readable only by doorbell-firebase-server', function() {
+  it('should not be readable by anyone', function() {
     expect(authServer)
-      .can.read.path(path);
+      .cannot.read.path(path);
 
     expect(users.simplelogin)
       .cannot.read.path(path);
@@ -50,8 +50,8 @@ describe(`/${path}`, function() {
       .to.path(path);
   });
 
-  describe(`/$team_id`, function() {
-    describe('/teams', function() {
+  describe(`/teams`, function() {
+    describe('/$teamId', function() {
       it('should be readable only by team users and doorbell-firebase-server', function() {
         expect(users.simplelogin)
           .can.read.path(`${path}/teams/0`);
@@ -83,8 +83,10 @@ describe(`/${path}`, function() {
           .to.path(`${path}/teams/0`);
       });
     });
+  });
 
-    describe('/users', function() {
+  describe('/users', function() {
+    describe('/$userId', function() {
       it('should be readable only by its user and doorbell-firebase-server', function() {
         expect(users.simplelogin)
           .can.read.path(`${path}/users/${users.simplelogin.uid}`);

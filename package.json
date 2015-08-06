@@ -4,7 +4,8 @@
   "description": "Doorbell Firebase",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "blaze rules.yaml"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   "homepage": "https://github.com/doorbellapp/doorbell-firebase#readme",
   "devDependencies": {
     "babel": "^5.8.20",
+    "blaze_compiler": "0.0.30",
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
     "targaryen": "^1.1.4"

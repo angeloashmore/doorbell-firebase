@@ -1,1 +1,4 @@
 /node_modules
+
+# Require the user to build the rules
+rules.json

@@ -1,0 +1,149 @@
+functions:
+  - isLoggedIn():            auth.uid !== null
+  - isServer():              auth.uid === 'doorbell-firebase-server'
+  - createOnly():            next.exists() && !prev.exists()
+  - deleteOnly():            prev.exists() && !next.exists()
+  - createOrDelete():        createOnly() || deleteOnly()
+  - isEmailAddress():        next.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)
+  - teamExists(id):          root.teams.hasChild(id)
+  - userExists(id):          root.users.hasChild(id)
+  - isTeamUser(teamId):      root.teamUsers[teamId].hasChild(auth.uid)
+  - isUser(id):              auth.uid === id
+  - hasOwnerRole(teamId):    root.teamUsers[teamId][auth.uid].roles.owner
+  - hasBillingRole(teamId):  root.teamUsers[teamId][auth.uid].roles.billing
+
+schema:
+  definitions:
+    billing:
+      type: object
+      properties:
+        planId: { type: string }
+        stripeCustomerId: { type: string, constraint: createOnly() }
+        email: { type: string, constraint: isEmailAddress() }
+        card:
+          type: object
+          properties:
+            brand: { type: string }
+            last4: { type: string }
+            expMonth: { type: string }
+            expYear: { type: string }
+          required: [brand, last4, expMonth, expYear]
+          additionalProperties: false
+      required: [planId, stripeCustomerId, email]
+      additionalProperties: false
+
+    plan:
+      type: object
+      properties:
+        name: { type: string }
+        stripePlanId: { type: string }
+      required: [name, stripePlanId]
+      additionalProperties: false
+
+    teamUser:
+      type: object
+      properties:
+        title: { type: string }
+        email: { type: string, constraint: isEmailAddress() }
+        private: { type: boolean }
+        roles:
+          type: object
+          properties:
+            owner: { type: boolean }
+            admin: { type: boolean }
+            billing: { type: boolean }
+          required: [owner, admin, billing]
+          additionalProperties: false
+      required: [email, private, roles]
+      additionalProperties: false
+
+    team:
+      type: object
+      properties:
+        name: { type: string }
+        email: { type: string, constraint: isEmailAddress() }
+      required: [name, email]
+      additionalProperties: false
+
+    user:
+      type: object
+      properties:
+        provider: { type: string }
+        email: { type: string, constraint: isEmailAddress() }
+        name: { type: string }
+      required: [provider, name, email]
+      additionalProperties: false
+
+  type: object
+  properties:
+
+    billings:
+      type: object
+      properties:
+        users:
+          type: object
+          $userId: { $ref: "#/definitions/billing" }
+        teams:
+          type: object
+          $teamId: { $ref: "#/definitions/billing" }
+      additionalProperties: false
+
+    plans:
+      type: object
+      properties:
+        users:
+          type: object
+          $planId: { $ref: "#/definitions/plan" }
+        teams:
+          type: object
+          $planId: { $ref: "#/definitions/plan" }
+      additionalProperties: false
+
+    teamUsers:
+      type: object
+      properties:
+        $teamId:
+          type: object
+          $userId: { $ref: "#/definitions/teamUser" }
+
+    teams:
+      type: object
+      $teamId: { $ref: "#/definitions/team" }
+
+    users:
+      type: object
+      $userId: { $ref: "#/definitions/user" }
+
+  additionalProperties: false
+
+access:
+  # billings
+  - location: billings/users/$userId
+    read: isServer() || isUser($userId)
+    write: isServer() && userExists($userId)
+
+  - location: billings/teams/$teamId
+    read: isServer() || (isTeamUser($teamId) && (hasOwnerRole($teamId) || hasBillingRole($teamId)))
+    write: isServer() && teamExists($teamId)
+
+  # plans
+  - location: plans
+    read: isServer() || isLoggedIn()
+
+  # teamUsers
+  - location: teamUsers/$teamId
+    read: isServer() || isTeamUser($teamId)
+
+  - location: teamUsers/$teamId/$userId
+    read: isServer() || isTeamUser($teamId)
+    write: isServer() && teamExists($teamId) && userExists($userId)
+
+  # teams
+  - location: teams/$teamId
+    read: isServer() || isTeamUser($teamId)
+    write: isServer()
+
+  # users
+  - location: users/$userId
+    read: isServer() || isUser($userId)
+    write: isServer()
