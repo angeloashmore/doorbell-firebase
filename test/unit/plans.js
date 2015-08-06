@@ -38,4 +38,31 @@ describe(`/${path}`, function() {
       .cannot.write()
       .to.path(path);
   });
+
+  describe('/$planId', function() {
+    it('should be readable by all authenticated users and doorbell-firebase-server', function() {
+      expect(authServer)
+        .can.read.path(`${path}/USER__DEFAULT`);
+
+      expect(users.simplelogin)
+        .can.read.path(`${path}/USER__DEFAULT`);
+
+      expect(users.unauthenticated)
+        .cannot.read.path(`${path}/USER__DEFAULT`);
+    });
+
+    it('should not be wriable by anyone', function() {
+      expect(authServer)
+        .cannot.write()
+        .to.path(`${path}/USER__DEFAULT`);
+
+      expect(users.simplelogin)
+        .cannot.write()
+        .to.path(`${path}/USER__DEFAULT`);
+
+      expect(users.unauthenticated)
+        .cannot.write()
+        .to.path(`${path}/USER__DEFAULT`);
+    });
+  });
 });

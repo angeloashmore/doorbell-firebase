@@ -18,6 +18,12 @@ const sampleData = {
     expYear: '16',
   },
 };
+const invalidSampleData = {
+  planId: 'invalid_planId',
+  stripeCustomerId: 'invalid_customer',
+  email: 'invalid_email',
+  card: 'invalid_card',
+};
 
 describe(`/${path}`, function() {
   before(function() {
@@ -75,11 +81,17 @@ describe(`/${path}`, function() {
           .to.path(`${path}/teams/0`);
 
         expect(users.simplelogin)
-          .cannot.write()
+          .cannot.write(sampleData)
           .to.path(`${path}/teams/0`);
 
         expect(users.unauthenticated)
-          .cannot.write()
+          .cannot.write(sampleData)
+          .to.path(`${path}/teams/0`);
+      });
+
+      it('should fail when writing invalid data', function() {
+        expect(authServer)
+          .cannot.write(invalidSampleData)
           .to.path(`${path}/teams/0`);
       });
     });
@@ -110,12 +122,18 @@ describe(`/${path}`, function() {
           .to.path(`${path}/users/${users.simplelogin.uid}`);
 
         expect(users.simplelogin)
-          .cannot.write()
+          .cannot.write(sampleData)
           .to.path(`${path}/users/${users.simplelogin.uid}`);
 
         expect(users.unauthenticated)
-          .cannot.write()
+          .cannot.write(sampleData)
           .to.path(`${path}/users/${users.simplelogin.uid}`);
+      });
+
+      it('should fail when writing invalid data', function() {
+        expect(authServer)
+          .cannot.write(invalidSampleData)
+          .to.path(`${path}/teams/0`);
       });
     });
   });

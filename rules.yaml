@@ -5,20 +5,22 @@ functions:
   - deleteOnly():            prev.exists() && !next.exists()
   - createOrDelete():        createOnly() || deleteOnly()
   - isEmailAddress():        next.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)
+  - planExists(name):        root.plans.hasChild(name)
   - teamExists(id):          root.teams.hasChild(id)
   - userExists(id):          root.users.hasChild(id)
   - isTeamUser(teamId):      root.teamUsers[teamId].hasChild(auth.uid)
   - isUser(id):              auth.uid === id
   - hasOwnerRole(teamId):    root.teamUsers[teamId][auth.uid].roles.owner
   - hasBillingRole(teamId):  root.teamUsers[teamId][auth.uid].roles.billing
+  - isStripeCustomerId():    next.val().matches(/^cus_/)
 
 schema:
   definitions:
     billing:
       type: object
       properties:
-        planId: { type: string }
-        stripeCustomerId: { type: string, constraint: createOnly() }
+        planId: { type: string, constraint: planExists(next.val()) }
+        stripeCustomerId: { type: string, constraint: createOnly() && isStripeCustomerId() }
         email: { type: string, constraint: isEmailAddress() }
         card:
           type: object
@@ -36,8 +38,8 @@ schema:
       type: object
       properties:
         name: { type: string }
-        stripePlanId: { type: string }
-      required: [name, stripePlanId]
+        type: { type: string, constraint: next === 'team' || next === 'user' }
+      required: [name, type]
       additionalProperties: false
 
     teamUser:
@@ -90,14 +92,7 @@ schema:
 
     plans:
       type: object
-      properties:
-        users:
-          type: object
-          $planId: { $ref: "#/definitions/plan" }
-        teams:
-          type: object
-          $planId: { $ref: "#/definitions/plan" }
-      additionalProperties: false
+      $planId: { $ref: "#/definitions/plan" }
 
     teamUsers:
       type: object

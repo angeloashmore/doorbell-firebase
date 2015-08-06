@@ -40,17 +40,13 @@
   },
 
   "plans": {
-    "users": {
-      "0": {
-        "name": "Default",
-        "stripePlanId": "USER__DEFAULT"
-      }
+    "USER__DEFAULT": {
+      "type": "user",
+      "name": "Default"
     },
-    "teams": {
-      "0": {
-        "name": "Default",
-        "stripePlanId": "TEAM__DEFAULT"
-      }
+    "TEAM__DEFAULT": {
+      "type": "team",
+      "name": "Default"
     }
   },
 
