@@ -1,36 +1,37 @@
-import test from '../../helpers/test';
+import test from '../../../helpers/test';
 
-const path = 'users';
+const path = 'queue/specs';
 
 const validData = {
-  provider: 'password',
-  email: 'name@example.com',
-  name: 'First Last',
+  start_state: null,
+  in_progress_state: 'in_progress',
+  finished_state: null,
+  error_state: 'error',
+  timeout: 300000,
+  retries: 0,
 };
 
 const invalidData = {
-  email: 'invalid_email',
+  start_state: 0,
+  in_progress_state: 0,
+  finished_state: 0,
+  error_state: 0,
+  timeout: 'invalid_timeout',
+  retries: 'invalid_retries',
 };
 
-test(`${path}/$userId`, (expect, users, server) => {
-  const path0 = `${path}/${users.simplelogin.uid}`;
-  const path1 = `${path}/${users.twitter.uid}`;
+test(`${path}/$specId`, (expect, users, server) => {
+  const path0 = `${path}/0`;
 
-  it('should be readable only by the user and doorbell-firebase-server', () => {
-    expect(users.simplelogin)
+  it('should be readable only by doorbell-firebase-server', () => {
+    expect(server)
       .can.read.path(path0);
 
     expect(users.simplelogin)
-      .cannot.read.path(path1);
+      .cannot.read.path(path0);
 
     expect(users.unauthenticated)
       .cannot.read.path(path0);
-
-    expect(server)
-      .can.read.path(path0);
-
-    expect(server)
-      .can.read.path(path1);
   });
 
   it('should be writable only by doorbell-firebase-server', () => {

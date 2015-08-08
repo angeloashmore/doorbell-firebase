@@ -13,6 +13,9 @@ functions:
   - hasOwnerRole(teamId):    root.teamUsers[teamId][auth.uid].roles.owner
   - hasBillingRole(teamId):  root.teamUsers[teamId][auth.uid].roles.billing
   - isStripeCustomerId():    next.val().matches(/^cus_/)
+  - isNow():                 next.val() === now
+  - notUpdatable():          prev.exists() && prev.val() === next.val()
+  - isCurrentUID():          auth.uid === next.val()
 
 schema:
   definitions:
@@ -76,6 +79,37 @@ schema:
       required: [provider, name, email]
       additionalProperties: false
 
+    task:
+      type: object
+      properties:
+        _state: { type: string }
+        _state_changed: { type: number, constraint: isNow() || notUpdatable() }
+        _owner: { type: string }
+        _progress: { type: number, minimum: 0, constraint: next <= 100 }
+        _error_details:
+          type: object
+          properties:
+            error: { type: string }
+            error_stack: { type: string }
+            previous_state: { type: string }
+            original_task: {}
+            attempts: { type: number, minimum: 0 }
+          additionalProperties: false
+        _uid: { type: string, constraint: isCurrentUID() }
+      required: [_uid]
+
+    spec:
+      type: object
+      properties:
+        start_state: { type: string }
+        in_progress_state: { type: string }
+        finished_state: { type: string }
+        error_state: { type: string }
+        timeout: { type: string }
+        retries: { type: number, minimum: 0 }
+      required: [in_progress_state]
+      additionalProperties: false
+
   type: object
   properties:
 
@@ -83,31 +117,35 @@ schema:
       type: object
       properties:
         users:
-          type: object
           $userId: { $ref: "#/definitions/billing" }
         teams:
-          type: object
           $teamId: { $ref: "#/definitions/billing" }
       additionalProperties: false
 
     plans:
-      type: object
       $planId: { $ref: "#/definitions/plan" }
 
     teamUsers:
       type: object
       properties:
         $teamId:
-          type: object
           $userId: { $ref: "#/definitions/teamUser" }
 
     teams:
-      type: object
       $teamId: { $ref: "#/definitions/team" }
 
     users:
-      type: object
       $userId: { $ref: "#/definitions/user" }
+
+    queue:
+      type: object
+      properties:
+        tasks:
+          $taskId: { $ref: "#/definitions/task" }
+        specs:
+          $specId: { $ref: "#/definitions/spec" }
+      additionalProperties: false
+
 
   additionalProperties: false
 
@@ -141,4 +179,20 @@ access:
   # users
   - location: users/$userId
     read: isServer() || isUser($userId)
+    write: isServer()
+
+  # queue
+  - location: queue/tasks
+    read: isServer()
+
+  - location: queue/tasks/$taskId
+    read: isServer()
+    write: isLoggedIn()
+
+  - location: queue/specs
+    read: isServer()
+    write: isServer()
+
+  - location: queue/specs/$specsId
+    read: isServer()
     write: isServer()
