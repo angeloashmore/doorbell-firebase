@@ -4,7 +4,7 @@ functions:
   - createOnly():            next.exists() && !prev.exists()
   - deleteOnly():            prev.exists() && !next.exists()
   - createOrDelete():        createOnly() || deleteOnly()
-  - isEmailAddress():        next.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i)
+  - isEmailAddress():        next.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)
   - planExists(name):        root.plans.hasChild(name)
   - teamExists(id):          root.teams.hasChild(id)
   - userExists(id):          root.users.hasChild(id)
@@ -94,7 +94,7 @@ schema:
             original_task: {}
             attempts: { type: number, minimum: 0 }
           additionalProperties: false
-        _uid: { type: string, constraint: isCurrentUID() }
+        _uid: { type: string, constraint: next.val() !== 'doorbell-firebase-server' && (isServer() || isCurrentUID()) }
         _action: { type: string }
       required: [_uid, _action]
 
@@ -184,9 +184,9 @@ access:
   # queue
   - location: queue/tasks
     read: isServer()
+    write: isServer()
 
   - location: queue/tasks/$taskId
-    read: isServer()
     write: isLoggedIn()
 
   - location: queue/specs
