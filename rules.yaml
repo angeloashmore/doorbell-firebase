@@ -82,7 +82,7 @@ schema:
       type: object
       properties:
         _state: { type: string }
-        _state_changed: { type: number, constraint: isNow() || notUpdatable() }
+        _state_changed: { type: number }
         _owner: { type: string }
         _progress: { type: number, minimum: 0, maximum: 100 }
         _error_details:
