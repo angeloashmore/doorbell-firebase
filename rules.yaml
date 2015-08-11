@@ -84,7 +84,7 @@ schema:
         _state: { type: string }
         _state_changed: { type: number, constraint: isNow() || notUpdatable() }
         _owner: { type: string }
-        _progress: { type: number, minimum: 0, constraint: next <= 100 }
+        _progress: { type: number, minimum: 0, maximum: 100 }
         _error_details:
           type: object
           properties:
