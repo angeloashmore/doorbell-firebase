@@ -10,8 +10,7 @@ functions:
   - userExists(id):          root.users.hasChild(id)
   - isTeamUser(teamId):      root.teamUsers[teamId].hasChild(auth.uid)
   - isUser(id):              auth.uid === id
-  - hasOwnerRole(teamId):    root.teamUsers[teamId][auth.uid].roles.owner
-  - hasBillingRole(teamId):  root.teamUsers[teamId][auth.uid].roles.billing
+  - hasRole(teamId, role):   root.teamUsers[teamId][auth.uid].roles[role] === true
   - isStripeCustomerId():    next.val().matches(/^cus_/)
   - isNow():                 next.val() === now
   - notUpdatable():          prev.exists() && prev.val() === next.val()
@@ -96,7 +95,8 @@ schema:
             attempts: { type: number, minimum: 0 }
           additionalProperties: false
         _uid: { type: string, constraint: isCurrentUID() }
-      required: [_uid]
+        _action: { type: string }
+      required: [_uid, _action]
 
     spec:
       type: object
@@ -156,7 +156,7 @@ access:
     write: isServer() && userExists($userId)
 
   - location: billings/teams/$teamId
-    read: isServer() || (isTeamUser($teamId) && (hasOwnerRole($teamId) || hasBillingRole($teamId)))
+    read: isServer() || (hasRole($teamId, owner) || hasRole($teamId, billing))
     write: isServer() && teamExists($teamId)
 
   # plans

@@ -4,14 +4,17 @@ const path = 'queue/tasks';
 
 const serverValidData = {
   _uid: 'doorbell-firebase-server',
+  _action: 'action__name',
 };
 
 const validData = {
   _uid: 'simplelogin:1',
+  _action: 'action__name',
 };
 
 const invalidData = {
   _uid: 'invalid_uid',
+  _action: 0
 };
 
 test(`${path}/$taskId`, (expect, users, server) => {
