@@ -21,7 +21,7 @@
   "devDependencies": {
     "babel": "^5.8.20",
     "babel-eslint": "^4.0.5",
-    "blaze_compiler": "0.0.30",
+    "blaze_compiler": "0.0.33",
     "chai": "^3.2.0",
     "eslint": "^1.0.0",
     "eslint-config-airbnb": "0.0.7",
